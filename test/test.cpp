@@ -3,9 +3,8 @@
 #include <iostream>
 #include <bitset>
 
+#include <subtests.hpp>
 #include <coapy.hpp>
-
-typedef std::vector<uint8_t> bytes;
 
 void compare_frames(coapy::coap_message m_in, coapy::coap_message m_out)
 {
@@ -34,44 +33,63 @@ void create_reference_frame(const coapy::coap_message m_in,bytes &reference_fram
   pdu->setToken((uint8_t*)&m_in.token[0],m_in.token.size());
   pdu->setMessageID(m_in.message_id);
 
-  pdu->addOption(m_in.options[0].number,m_in.options[0].values.size(),(uint8_t*)&(m_in.options[0].values[0]));
-  
+  for(auto &opt:m_in.options)
+  { 
+  pdu->addOption(opt.number,opt.values.size(),(uint8_t*)&(opt.values[0]));
+  }
   reference_frame = bytes(pdu->getPDUPointer(),pdu->getPDUPointer()+pdu->getPDULength());
 }
 
-int main(int argc, char** argv)
+void print_frame(const bytes frame)
+{
+  std::cout << "--------" << std::endl; 
+  std::cout << "---FRAME" << std::endl; 
+  for(auto &l:frame)
+  {
+    std::cout << std::bitset<8>(l) << std::endl;
+  }
+  std::cout << "--------" << std::endl; 
+}
+
+int perform_tests(const test_list &tests, bool debug)
 {
 
-  coapy::coap_message m_in,m_out;
- 
-  m_in.version = 1;
-  m_in.type = CoapPDU::COAP_CONFIRMABLE;
-  m_in.code_class = 0;
-  m_in.code_detail = 1;
-  m_in.message_id = 0xABCD;
-  
-  std::string tok("BCAFF");
-  m_in.token = bytes(tok.begin(),tok.end());
-  
-  coapy::coap_option o_in;
-  o_in.number=11;
-  
-  std::string vals("hello");
-  o_in.values = bytes(vals.begin(),vals.end());
-  m_in.options.push_back(o_in);
-  
-  bytes frame;
-  create_reference_frame(m_in,frame);
+  for(auto &el:tests)
+  {
+    bytes frame;
+    coapy::coap_message m_out;
+    create_reference_frame(el,frame);
 
-  if(coapy::coap_message_parser(frame.begin(),frame.end(),m_out))
-  {
-   compare_frames(m_in,m_out);
-  }
-  else
-  {
-   std::cout << "Parse error" << std::endl;
-   return 1;
+    if(debug)
+    {
+      print_frame(frame);
+    }
+
+    if(coapy::coap_message_parser(frame.begin(),frame.end(),m_out))
+    {
+      compare_frames(el,m_out);
+      std::cout << "Subtest passed..." << std::endl;
+    }
+    else
+    {
+      std::cout << "Parse error" << std::endl;
+      return 1;
+    }
   }
 
+  std::cout << "All tests OK :-)" << std::endl;
   return 0;
+
+}
+
+
+int main(int argc, char** argv)
+{
+  test_list tests;
+
+  test_1(tests);
+  test_2(tests);
+  test_3(tests);
+
+  return perform_tests(tests,true);
 }
