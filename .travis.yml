@@ -1,0 +1,17 @@
+language: cpp
+
+addons:
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+        packages:
+            - g++-5
+
+before_script:  
+    - mkdir build_gcc
+    - cd build_gcc
+    - cmake .. -DCMAKE_CXX_COMPILER=/usr/bin/g++-5
+
+script: 
+       - make 
+       - make test
