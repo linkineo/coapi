@@ -1,15 +1,23 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
 
-project(coap-on-mcu)
-find_package(Boost REQUIRED)
+project(coapi)
 
-include_directories(${CMAKE_SOURCE_DIR})
+option(USE_EXTERNAL_BOOST "Use external Boost library" OFF)
+
+if(USE_EXTERNAL_BOOST)
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+else()
+include_directories(${CMAKE_SOURCE_DIR}/deps)
+endif()
+
+include_directories(${CMAKE_SOURCE_DIR}/coapi)
 
 add_definitions(-std=c++11)
-add_executable(coap-on-mcu main.cpp)
+add_executable(coapi example.cpp)
 
 add_subdirectory(test)
 
 enable_testing()
-add_test(frame_parser test/coapy_test)
+add_test(frame_parser test/coapi_test)
 

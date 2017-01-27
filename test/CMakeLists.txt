@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-project(coapy_test)
+project(coapi_test)
 
 add_definitions(-std=c++11)
 include_directories(cantcoap ${CMAKE_SOURCE_DIR}/test)
 
-add_executable(coapy_test test.cpp)
+add_executable(coapi_test test.cpp)

@@ -1,11 +1,11 @@
-#include <coapy.hpp>
+#include <coapi.hpp>
 
 typedef std::vector<uint8_t> bytes;
-typedef std::vector<coapy::coap_message> test_list;
+typedef std::vector<coapi::coap_message> test_list;
 
 void test_1(test_list &tests)
 {
-  coapy::coap_message m_in;
+  coapi::coap_message m_in;
 
   m_in.version = 1;
   m_in.type = 0;
@@ -17,7 +17,7 @@ void test_1(test_list &tests)
   std::string tok("BCAFF"); //8 bytes max
   m_in.token = bytes(tok.begin(),tok.end());
 
-  coapy::coap_option o_in;
+  coapi::coap_option o_in;
   o_in.number=11; 
 
   std::string vals("hello"); 
@@ -30,7 +30,7 @@ void test_1(test_list &tests)
 
 void test_2(test_list &tests)
 {
-  coapy::coap_message m_in;
+  coapi::coap_message m_in;
 
   m_in.version = 1;
   m_in.type = 0;
@@ -42,14 +42,14 @@ void test_2(test_list &tests)
   std::string tok("BCAFFHH"); //8 bytes max
   m_in.token = bytes(tok.begin(),tok.end());
 
-  coapy::coap_option o_in;
+  coapi::coap_option o_in;
   o_in.number=10;
 
   std::string vals("world"); 
   o_in.values = bytes(vals.begin(),vals.end());
   m_in.options.push_back(o_in);
 
-  coapy::coap_option o_in2;
+  coapi::coap_option o_in2;
   o_in2.number=11;
 
   std::string vals2("new");
@@ -62,7 +62,7 @@ void test_2(test_list &tests)
 
 void test_3(test_list &tests)
 {
-  coapy::coap_message m_in;
+  coapi::coap_message m_in;
 
   m_in.version = 1;
   m_in.type = 0;
@@ -74,14 +74,14 @@ void test_3(test_list &tests)
   std::string tok("AAAA"); //8 bytes max
   m_in.token = bytes(tok.begin(),tok.end());
 
-  coapy::coap_option o_in;
+  coapi::coap_option o_in;
   o_in.number=10;
 
   std::string vals("a");   
   o_in.values = bytes(vals.begin(),vals.end());
   m_in.options.push_back(o_in);
 
-  coapy::coap_option o_in2;
+  coapi::coap_option o_in2;
   o_in2.number=10;
 
   std::string vals2("a");

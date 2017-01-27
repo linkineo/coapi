@@ -4,9 +4,9 @@
 #include <bitset>
 
 #include <subtests.hpp>
-#include <coapy.hpp>
+#include <coapi.hpp>
 
-void compare_frames(coapy::coap_message m_in, coapy::coap_message m_out)
+void compare_frames(coapi::coap_message m_in, coapi::coap_message m_out)
 {
    assert(m_out.type == m_in.type);
    assert(m_out.code_class == m_in.code_class);
@@ -15,7 +15,7 @@ void compare_frames(coapy::coap_message m_in, coapy::coap_message m_out)
    assert(std::equal(m_out.token.begin(),m_out.token.end(),m_in.token.begin()));
 
    assert(m_out.options.size() == m_in.options.size()); 
-   assert(std::equal(m_out.options.begin(),m_out.options.end(),m_in.options.begin(),[](coapy::coap_option out, coapy::coap_option in)
+   assert(std::equal(m_out.options.begin(),m_out.options.end(),m_in.options.begin(),[](coapi::coap_option out, coapi::coap_option in)
      { return(out.number == in.number &&
        std::equal(out.values.begin(),out.values.end(),in.values.begin()));
      }));
@@ -24,7 +24,7 @@ void compare_frames(coapy::coap_message m_in, coapy::coap_message m_out)
    assert(std::equal(m_out.payload.begin(),m_out.payload.end(),m_in.payload.begin()));
 }
 
-void create_reference_frame(const coapy::coap_message m_in,bytes &reference_frame)
+void create_reference_frame(const coapi::coap_message m_in,bytes &reference_frame)
 {
   CoapPDU *pdu = new CoapPDU(); 
   pdu->setVersion(m_in.version);
@@ -57,7 +57,7 @@ int perform_tests(const test_list &tests, bool debug)
   for(auto &el:tests)
   {
     bytes frame;
-    coapy::coap_message m_out;
+    coapi::coap_message m_out;
     create_reference_frame(el,frame);
 
     if(debug)
@@ -65,7 +65,7 @@ int perform_tests(const test_list &tests, bool debug)
       print_frame(frame);
     }
 
-    if(coapy::coap_message_parser(frame.begin(),frame.end(),m_out))
+    if(coapi::coap_message_parser(frame.begin(),frame.end(),m_out))
     {
       compare_frames(el,m_out);
       std::cout << "Subtest passed..." << std::endl;
