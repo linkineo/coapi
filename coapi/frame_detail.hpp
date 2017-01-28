@@ -1,6 +1,7 @@
 #ifndef COAPY_FRAME_DETAILS_HPP
 #define COAPY_FRAME_DETAILS_HPP
 
+#include <algorithm>
 #include <vector>
 
 namespace coapi {
@@ -29,6 +30,13 @@ struct coap_message {
   coap_options_list options;
   coap_payload payload;
 };
+
+void sort_options(coap_options_list &list)  
+{
+  std::sort(list.begin(), list.end(), [](coap_option a, coap_option b){
+    return a.number < b.number;
+  });
+}
 
 }
 

@@ -8,6 +8,8 @@
 
 void compare_frames(coapi::coap_message m_in, coapi::coap_message m_out)
 {
+   coapi::sort_options(m_in.options);
+   
    assert(m_out.type == m_in.type);
    assert(m_out.code_class == m_in.code_class);
    assert(m_out.code_detail == m_in.code_detail);
@@ -77,6 +79,7 @@ int perform_tests(const test_list &tests, bool debug)
     }
   }
 
+  std::cout << "Performed n=" << tests.size() << " tests" <<std::endl;
   std::cout << "All tests OK :-)" << std::endl;
   return 0;
 
@@ -90,6 +93,9 @@ int main(int argc, char** argv)
   test_1(tests);
   test_2(tests);
   test_3(tests);
+  test_4(tests);
+  test_5(tests);
+  test_6(tests);
 
   return perform_tests(tests,true);
 }
