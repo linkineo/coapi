@@ -67,7 +67,7 @@ bool coap_message_parser(Iterator first, Iterator last, coapi::coap_message &msg
                         >> (
                               (  eps(ref(delta) <= 12)  
                               | (eps(ref(delta) == 13) >> byte_[ref(delta) += _1]) 
-                              | (eps(ref(delta) == 14) >> big_word[ref(delta) = (_1 + 255)]) //can overflow
+                              | (eps(ref(delta) == 14) >> big_word[ref(delta) += (_1 + 255)]) //can overflow
                               ) 
                               >> eps[ref(option.number) += ref(delta)]
                               //internal
@@ -78,7 +78,7 @@ bool coap_message_parser(Iterator first, Iterator last, coapi::coap_message &msg
                         >> (  
                               (eps(ref(option_delta_length) <= 12) 
                               | (eps(ref(option_delta_length) == 13) >> byte_[ref(option_delta_length) += _1]) 
-                              | (eps(ref(option_delta_length) == 14) >> big_word[ref(option_delta_length) = (_1 + 255)]) //can overflow
+                              | (eps(ref(option_delta_length) == 14) >> big_word[ref(option_delta_length) += (_1 + 255)]) //can overflow
                               )
 
                               //option value
