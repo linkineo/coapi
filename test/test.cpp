@@ -18,7 +18,8 @@ void compare_frames(coapi::coap_message m_in, coapi::coap_message m_out)
 
    assert(m_out.options.size() == m_in.options.size()); 
    assert(std::equal(m_out.options.begin(),m_out.options.end(),m_in.options.begin(),[](coapi::coap_option out, coapi::coap_option in)
-     { return(out.number == in.number &&
+     { 
+       return(out.number == in.number &&
        std::equal(out.values.begin(),out.values.end(),in.values.begin()));
      }));
 
@@ -30,7 +31,21 @@ void create_reference_frame(const coapi::coap_message m_in,bytes &reference_fram
 {
   CoapPDU *pdu = new CoapPDU(); 
   pdu->setVersion(m_in.version);
-  pdu->setType((CoapPDU::Type)m_in.type);
+  switch(m_in.type)
+  {
+    case 0:
+    pdu->setType((CoapPDU::Type::COAP_CONFIRMABLE));
+    break;
+    case 1:
+    pdu->setType((CoapPDU::Type::COAP_NON_CONFIRMABLE));
+    break;
+    case 2:
+    pdu->setType((CoapPDU::Type::COAP_ACKNOWLEDGEMENT));
+    break;
+    case 3:
+    pdu->setType((CoapPDU::Type::COAP_RESET));
+    break;
+  }
   pdu->setCode(CoapPDU::Code((m_in.code_class << 5) + m_in.code_detail));
   pdu->setToken((uint8_t*)&m_in.token[0],m_in.token.size());
   pdu->setMessageID(m_in.message_id);
@@ -39,6 +54,10 @@ void create_reference_frame(const coapi::coap_message m_in,bytes &reference_fram
   { 
   pdu->addOption(opt.number,opt.values.size(),(uint8_t*)&(opt.values[0]));
   }
+
+  pdu->setPayload((uint8_t*)&(m_in.payload[0]),m_in.payload.size());
+
+
   reference_frame = bytes(pdu->getPDUPointer(),pdu->getPDUPointer()+pdu->getPDULength());
 }
 
@@ -96,6 +115,13 @@ int main(int argc, char** argv)
   test_4(tests);
   test_5(tests);
   test_6(tests);
+  test_7(tests);
+  test_8(tests);
+  test_9(tests);
+  test_10(tests);
+  test_11(tests);
+  test_12(tests);
+  test_13(tests);
 
   return perform_tests(tests,true);
 }

@@ -120,8 +120,7 @@ void test_4(test_list &tests)
   o_in2.values = bytes(vals2.begin(),vals2.end());
   m_in.options.push_back(o_in2);
 
-
-tests.push_back(m_in);
+  tests.push_back(m_in);
 }
 
 void test_5(test_list &tests)
@@ -169,6 +168,216 @@ void test_6(test_list &tests)
   o_in2.values = bytes(vals2.begin(),vals2.end());
   m_in.options.push_back(o_in2);
 
-
-tests.push_back(m_in);
+  tests.push_back(m_in);
 }
+
+void test_7(test_list &tests)
+{
+  coapi::coap_message m_in;
+
+  m_in.version = 1;
+  m_in.type = 1;
+  m_in.code_class = 0;
+  m_in.code_detail = 1;
+
+  m_in.message_id = 0xAAAA; // 2 bytes
+
+  std::string tok("AAAABBBB"); //8 bytes max
+  m_in.token = bytes(tok.begin(),tok.end());
+
+  tests.push_back(m_in);
+}
+
+void test_8(test_list &tests)
+{
+  coapi::coap_message m_in;
+
+  m_in.version = 1;
+  m_in.type = 3;
+  m_in.code_class = 3;
+  m_in.code_detail = 2;
+
+  m_in.message_id = 0xAAAA; // 2 bytes
+
+  std::string tok("AAAABBBB"); //8 bytes max
+  m_in.token = bytes(tok.begin(),tok.end());
+
+  tests.push_back(m_in);
+}
+
+void test_9(test_list &tests)
+{
+  coapi::coap_message m_in;
+
+  m_in.version = 1;
+  m_in.type = 3;
+  m_in.code_class = 3;
+  m_in.code_detail = 2;
+
+  m_in.message_id = 0x62AB; // 2 bytes
+
+  std::string tok("AQ"); //8 bytes max
+  m_in.token = bytes(tok.begin(),tok.end());
+
+  std::string pl("STAIRWAYTOHEAVEN");
+  m_in.payload.insert(m_in.payload.begin(),pl.begin(),pl.end());
+  
+  tests.push_back(m_in);
+}
+
+void test_10(test_list &tests)
+{
+  coapi::coap_message m_in;
+
+  m_in.version = 1;
+  m_in.type = 1;
+  m_in.code_class = 1;
+  m_in.code_detail = 3;
+
+  m_in.message_id = 0xDBCA; // 2 bytes
+
+  std::string tok("HEHE"); //8 bytes max
+  m_in.token = bytes(tok.begin(),tok.end());
+
+  coapi::coap_option o_in;
+  o_in.number=10;
+
+  std::string vals("tonightim");
+  o_in.values = bytes(vals.begin(),vals.end());
+  m_in.options.push_back(o_in);
+
+  coapi::coap_option o_in2;
+  o_in2.number=12;
+
+  std::string vals2("gonnahave");
+  o_in2.values = bytes(vals2.begin(),vals2.end());
+  m_in.options.push_back(o_in2);
+
+  std::string pl("myselfarealgoodtime");
+  m_in.payload.insert(m_in.payload.begin(),pl.begin(),pl.end());
+
+  tests.push_back(m_in);
+}
+
+void test_11(test_list &tests)
+{
+  coapi::coap_message m_in;
+
+  m_in.version = 1;
+  m_in.type = 2;
+  m_in.code_class = 2;
+  m_in.code_detail = 1;
+
+  m_in.message_id = 0xACAB; // 2 bytes
+
+  std::string tok("LAND"); //8 bytes max
+  m_in.token = bytes(tok.begin(),tok.end());
+
+  coapi::coap_option o_in;
+  o_in.number=10;
+
+  std::string vals("a");
+  o_in.values = bytes(vals.begin(),vals.end());
+  m_in.options.push_back(o_in);
+
+  coapi::coap_option o_in2;
+  o_in2.number=25;
+
+  std::string vals2("b");
+  o_in2.values = bytes(vals2.begin(),vals2.end());
+  m_in.options.push_back(o_in2);
+
+
+  tests.push_back(m_in);
+}
+
+void test_12(test_list &tests)
+{
+  coapi::coap_message m_in;
+
+  m_in.version = 1;
+  m_in.type = 2;
+  m_in.code_class = 2;
+  m_in.code_detail = 1;
+
+  m_in.message_id = 0xACAB; // 2 bytes
+
+  std::string tok("LAND"); //8 bytes max
+  m_in.token = bytes(tok.begin(),tok.end());
+
+  coapi::coap_option o_in;
+  o_in.number=160;
+
+  std::string vals("a");
+  o_in.values = bytes(vals.begin(),vals.end());
+  m_in.options.push_back(o_in);
+
+  coapi::coap_option o_in2;
+  o_in2.number=500;
+
+  std::string vals2("b");
+  o_in2.values = bytes(vals2.begin(),vals2.end());
+  m_in.options.push_back(o_in2);
+
+
+  tests.push_back(m_in);
+}
+
+void test_13(test_list &tests)
+{
+  coapi::coap_message m_in;
+
+  m_in.version = 1;
+  m_in.type = 1;
+  m_in.code_class = 1;
+  m_in.code_detail = 3;
+
+  m_in.message_id = 0xEEEE; // 2 bytes
+
+  std::string tok("HEHEHEHE"); //8 bytes max
+  m_in.token = bytes(tok.begin(),tok.end());
+
+  coapi::coap_option o_in;
+  o_in.number=10;
+
+  std::string vals("tonightim");
+  o_in.values = bytes(vals.begin(),vals.end());
+  m_in.options.push_back(o_in);
+
+  coapi::coap_option o_in2;
+  o_in2.number=10;
+
+  std::string vals2("gonnahavetonightarealgoodtimegonnahavetonightarealgoodtimegonnahavetonightarealgoodtimegonnahavetonightarealgoodtimegonnahavetonightarealgoodtimegonnahavetonightarealgoodtimegonnahavetonightarealgoodtime");
+  o_in2.values = bytes(vals2.begin(),vals2.end());
+  m_in.options.push_back(o_in2);
+
+  coapi::coap_option o_in3;
+  o_in3.number=60;
+
+  std::string vals3("theres");
+  o_in3.values = bytes(vals3.begin(),vals3.end());
+  m_in.options.push_back(o_in3);
+
+  coapi::coap_option o_in4;
+  o_in4.number=500;
+
+  std::string vals4("nostoppingme");
+  o_in4.values = bytes(vals4.begin(),vals4.end());
+  m_in.options.push_back(o_in4);
+
+  coapi::coap_option o_in5;
+  o_in5.number=1000;
+
+  std::string vals5("t");
+  o_in5.values = bytes(vals5.begin(),vals5.end());
+  m_in.options.push_back(o_in5);
+
+
+  std::string pl("itsagodawfulsmallaffairforthegirlwiththemouseyhair");
+  m_in.payload.insert(m_in.payload.begin(),pl.begin(),pl.end());
+
+  tests.push_back(m_in);
+}
+
+
+
