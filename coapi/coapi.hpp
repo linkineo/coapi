@@ -3,6 +3,7 @@
 
 #include <boost/config/warning_disable.hpp>
 #include <boost/spirit/include/qi.hpp>
+#include <boost/spirit/include/karma.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/phoenix_stl.hpp>
@@ -15,6 +16,45 @@
 namespace coapi {
 
 namespace qi = boost::spirit::qi;
+namespace ka = boost::spirit::karma;
+
+template <typename OutputIterator>
+bool coap_message_generator(OutputIterator out, coapi::coap_message &msg)
+{
+    using ka::generate;
+    using ka::byte_;
+    using ka::big_word;
+    using ka::hex;
+    using ka::eps;
+    using boost::phoenix::ref;
+    using boost::phoenix::at;
+    using boost::phoenix::pop_back;
+    using boost::phoenix::clear;
+    using ka::_1;
+    using ka::repeat;
+
+    namespace phnx = boost::phoenix;
+    
+    uint8_t coap_header = 0;
+    uint8_t coap_code = 0;
+  
+    coap_header += (msg.version << 6);
+    coap_header += (msg.type << 4);
+    coap_header += msg.token.size();
+    coap_code += msg.code_detail;
+    coap_code += (msg.code_class << 5);
+    
+    uint8_t token_at = 0;
+  
+    return generate(out,
+           (
+           byte_[_1 = ref(coap_header)] 
+           << byte_[_1 = ref(coap_code)]
+           << big_word[_1 = ref(msg.message_id)]
+           << eps[pop_back(phnx::ref(msg.token))]
+           << repeat(msg.token.size())[byte_[_1 = phnx::ref(msg.token)[phnx::ref(token_at)++]]]
+           ));
+}
 
 template <typename Iterator>
 bool coap_message_parser(Iterator first, Iterator last, coapi::coap_message &msg)

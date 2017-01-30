@@ -11,9 +11,9 @@ int main(int argc, char **argv)
                          0b11111111, //code
                          0b11111111, // -message id
                          0b11111111, // -
-                         0b11111111, // -token
-                         0b11111111, // -
-                         0b11111111, // -
+                         0b00000001, // -token
+                         0b00000010, // -
+                         0b00000100, // -
                          0b11000010, // option header
                          0b00000001, // -option value
                          0b00011111, // -
@@ -57,5 +57,26 @@ int main(int argc, char **argv)
   {
       std::cout << "Payload=" << (int)l << std::endl;
   }
+
+
+  std::cout << "-------" << std::endl;
+  std::cout << "Input vector" << std::endl;
+  for(auto &el:v)
+  {
+  std::cout << std::bitset<8>(el) << std::endl;
+  }
+
+  std::cout << std::endl << std::endl;
+  std::cout << "Output vector" << std::endl;
+
+  std::vector<uint8_t> vv{};
+  std::back_insert_iterator<std::vector<uint8_t>> it(vv);
+  auto pp = coap_message_generator(it,m);
+  for(auto &m:vv) 
+  {
+  std::cout << std::bitset<8>(m) << std::endl;
+  }
+
+  
   return 0;
 }
