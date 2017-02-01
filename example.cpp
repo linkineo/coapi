@@ -77,6 +77,13 @@ int main(int argc, char **argv)
   std::cout << std::bitset<8>(m) << std::endl;
   }
 
+  if(std::equal(v.begin(),v.end(),vv.begin()))
+  {
+    std::cout << "IN=OUT" << std::endl;
+  }else
+  {
+    std::cout << "IN DIFFERENT FROM OUT" << std::endl;
+  }
   
   return 0;
 }
