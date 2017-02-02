@@ -8,9 +8,6 @@
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/phoenix_stl.hpp>
 #include <boost/spirit/include/phoenix_container.hpp>
-#include <boost/spirit/include/qi_uint.hpp>
-#include <boost/spirit/include/qi_eps.hpp>
-#include <boost/spirit/include/karma_eps.hpp>
 
 #include <frame_detail.hpp>
 
@@ -30,7 +27,6 @@ bool coap_message_generator(OutputIterator out, coapi::coap_message &msg)
     using boost::phoenix::ref;
     using boost::phoenix::size;
     using boost::phoenix::at;
-    using boost::phoenix::pop_back;
     using boost::phoenix::clear;
     using ka::_1;
     using ka::repeat;
@@ -63,8 +59,7 @@ bool coap_message_generator(OutputIterator out, coapi::coap_message &msg)
            byte_[_1 = ref(coap_header)] 
            << byte_[_1 = ref(coap_code)]
            << big_word[_1 = ref(msg.message_id)]
-           << eps[pop_back(phnx::ref(msg.token))]
-           << repeat(msg.token.size())[byte_[_1 = phnx::ref(msg.token)[phnx::ref(token_at)++]]]
+           << repeat(size(phnx::ref(msg.token)))[byte_[_1 = phnx::ref(msg.token)[phnx::ref(token_at)++]]]
            
            << repeat(msg.options.size())[
                 eps[phnx::ref(option) = at(phnx::ref(msg.options),phnx::ref(options_at)++)] << eps[phnx::ref(delta) = (phnx::ref(option.number) - phnx::ref(number))] << eps[phnx::ref(number) = phnx::ref(option.number)] 
