@@ -17,7 +17,7 @@ namespace qi = boost::spirit::qi;
 namespace ka = boost::spirit::karma;
 
 template <typename OutputIterator>
-bool coap_message_generator(OutputIterator out, coapi::coap_message &msg)
+bool coap_message_generator(OutputIterator out,const coapi::coap_message &msg)
 {
     using ka::generate;
     using ka::byte_;
