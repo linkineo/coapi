@@ -63,24 +63,27 @@ void create_reference_frame(const coapi::coap_message m_in,bytes &reference_fram
 
 void print_frame(const bytes frame)
 {
-  std::cout << "--------" << std::endl; 
-  std::cout << "---FRAME" << std::endl; 
+  int line=0;
   for(auto &l:frame)
   {
-    std::cout << std::bitset<8>(l) << std::endl;
+    std::cout << line << ":" << std::bitset<8>(l) << std::endl;
+    line++;
   }
-  std::cout << "--------" << std::endl; 
 }
 
-int perform_tests(const test_list &tests, bool debug)
+int perform_parser_tests(const test_list &tests, bool debug)
 {
 
-  for(auto &el:tests)
+  std::cout << "------------" << std::endl;
+  std::cout << "PARSER TESTS" << std::endl;
+  int test = 1;
+  for(auto el:tests)
   {
     bytes frame;
     coapi::coap_message m_out;
     create_reference_frame(el,frame);
 
+      std::cout << std::endl << "---------PTest=" << test << std::endl;
     if(debug)
     {
       print_frame(frame);
@@ -96,14 +99,57 @@ int perform_tests(const test_list &tests, bool debug)
       std::cout << "Parse error" << std::endl;
       return 1;
     }
+    test++;
   }
 
   std::cout << "Performed n=" << tests.size() << " tests" <<std::endl;
-  std::cout << "All tests OK :-)" << std::endl;
+  std::cout << "All PARSER tests OK :-)" << std::endl;
   return 0;
 
 }
 
+
+int perform_generator_tests(test_list &tests, bool debug)
+{
+  std::cout << "------------" << std::endl;
+  std::cout << "PARSER TESTS" << std::endl;
+  int test = 1; 
+  for(auto el:tests)
+  {
+    bytes generated,reference;
+    std::back_insert_iterator<bytes> genit(generated);
+
+    coapi::sort_options(el.options);
+    create_reference_frame(el,reference);
+    coapi::coap_message_generator(genit,el);
+
+    std::cout << std::endl << "---------GTest=" << test << std::endl;
+    
+    if(debug)
+    {
+      std::cout << "------REF-------" << std::endl;
+      print_frame(reference);
+      std::cout << "------GEN-------" << std::endl;
+      print_frame(generated);
+    }
+
+    for(int p=0;p<reference.size();p++)
+    {
+      if( reference[p] != generated[p] )
+      {
+        std::cout << "DIFF " << p << ":" << std::bitset<8>(reference[p]) << "--" << std::bitset<8>(generated[p]) << std::endl;
+      }
+    }
+
+    assert(std::equal(reference.begin(),reference.end(),generated.begin()));
+    std::cout << "Subtest passed" << std::endl;
+    test++;
+  }
+
+  std::cout << "Performed n=" << tests.size() << " tests" <<std::endl;
+  std::cout << "All GENERATOR tests OK :-)" << std::endl;
+  return 0;
+}
 
 int main(int argc, char** argv)
 {
@@ -123,5 +169,10 @@ int main(int argc, char** argv)
   test_12(tests);
   test_13(tests);
 
-  return perform_tests(tests,true);
+  perform_parser_tests(tests,true);
+  perform_generator_tests(tests,true);
+  
+  return 0;
+  
+  //return (perform_parser_tests(tests,true) && perform_generator_tests(gtests,true));
 }
