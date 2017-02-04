@@ -4,11 +4,13 @@
 #include <algorithm>
 #include <vector>
 
+#include <coap_codes.hpp>
+
 namespace coapi {
 
 struct coap_option {
 
-  uint16_t number = 0;
+  uint16_t number = option_registry::reserved_zero;
   std::vector<uint8_t> values;
 };
 
