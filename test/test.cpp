@@ -173,6 +173,4 @@ int main(int argc, char** argv)
   perform_generator_tests(tests,true);
   
   return 0;
-  
-  //return (perform_parser_tests(tests,true) && perform_generator_tests(gtests,true));
 }
