@@ -8,9 +8,8 @@ void test_1(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 0;
-  m_in.code_class = 0;
-  m_in.code_detail = 1;
+  m_in.type = coapi::coap_type::confirmable;
+  m_in.code = coapi::code_registry::GET;
   
   m_in.message_id = 0xABCD; // 2 bytes
 
@@ -33,9 +32,8 @@ void test_2(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 0;
-  m_in.code_class = 0;
-  m_in.code_detail = 1;
+  m_in.type = coapi::coap_type::confirmable;
+  m_in.code = coapi::code_registry::GET;
   
   m_in.message_id = 0xDDBA; // 2 bytes
 
@@ -65,9 +63,8 @@ void test_3(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 0;
-  m_in.code_class = 0;
-  m_in.code_detail = 1;
+  m_in.type = coapi::coap_type::confirmable;
+  m_in.code = coapi::code_registry::GET;
 
   m_in.message_id = 0xAAAA; // 2 bytes
 
@@ -97,9 +94,8 @@ void test_4(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 0;
-  m_in.code_class = 0;
-  m_in.code_detail = 1;
+  m_in.type = coapi::coap_type::confirmable;
+  m_in.code = coapi::code_registry::GET;
 
   m_in.message_id = 0xFADC; // 2 bytes
 
@@ -128,9 +124,8 @@ void test_5(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 0;
-  m_in.code_class = 5;
-  m_in.code_detail = 3;
+  m_in.type = coapi::coap_type::confirmable;
+  m_in.code = coapi::code_registry::service_unavailable;
 
   m_in.message_id = 0xCCCC; // 2 bytes
 
@@ -145,9 +140,8 @@ void test_6(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 0;
-  m_in.code_class = 0;
-  m_in.code_detail = 1;
+  m_in.type = coapi::coap_type::confirmable;
+  m_in.code = coapi::code_registry::GET;
 
   m_in.message_id = 0xAAAA; // 2 bytes
 
@@ -176,9 +170,8 @@ void test_7(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 1;
-  m_in.code_class = 0;
-  m_in.code_detail = 1;
+  m_in.type = coapi::coap_type::non_confirmable;
+  m_in.code = coapi::code_registry::GET;
 
   m_in.message_id = 0xAAAA; // 2 bytes
 
@@ -193,9 +186,8 @@ void test_8(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 3;
-  m_in.code_class = 3;
-  m_in.code_detail = 2;
+  m_in.type = coapi::coap_type::reset;
+  m_in.code = coapi::code_registry::unauthorized;
 
   m_in.message_id = 0xAAAA; // 2 bytes
 
@@ -210,9 +202,8 @@ void test_9(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 3;
-  m_in.code_class = 3;
-  m_in.code_detail = 2;
+  m_in.type = coapi::coap_type::reset;
+  m_in.code = coapi::code_registry::unauthorized;
 
   m_in.message_id = 0x62AB; // 2 bytes
 
@@ -230,9 +221,8 @@ void test_10(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 1;
-  m_in.code_class = 1;
-  m_in.code_detail = 3;
+  m_in.type = coapi::coap_type::non_confirmable;
+  m_in.code = coapi::code_registry::valid;
 
   m_in.message_id = 0xDBCA; // 2 bytes
 
@@ -264,9 +254,8 @@ void test_11(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 2;
-  m_in.code_class = 2;
-  m_in.code_detail = 1;
+  m_in.type = coapi::coap_type::acknowledgement;
+  m_in.code = coapi::code_registry::created;
 
   m_in.message_id = 0xACAB; // 2 bytes
 
@@ -296,9 +285,8 @@ void test_12(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 2;
-  m_in.code_class = 2;
-  m_in.code_detail = 1;
+  m_in.type = coapi::coap_type::acknowledgement;
+  m_in.code = coapi::code_registry::created;
 
   m_in.message_id = 0xACAB; // 2 bytes
 
@@ -328,9 +316,8 @@ void test_13(test_list &tests)
   coapi::coap_message m_in;
 
   m_in.version = 1;
-  m_in.type = 1;
-  m_in.code_class = 1;
-  m_in.code_detail = 3;
+  m_in.type = coapi::coap_type::non_confirmable;
+  m_in.code = coapi::code_registry::not_acceptable;
 
   m_in.message_id = 0xEEEE; // 2 bytes
 

@@ -34,15 +34,11 @@ bool coap_message_generator(OutputIterator out,const coapi::coap_message &msg)
     namespace phnx = boost::phoenix;
     
     uint8_t coap_header = 0;
-    uint8_t coap_code = 0;
     uint8_t options_header = 0;
   
     coap_header += (msg.version << 6);
-    coap_header += (msg.type << 4);
+    coap_header += (uint8_t)msg.type;
     coap_header += msg.token.size();
-    coap_code += msg.code_detail;
-    coap_code += (msg.code_class << 5);
-       
  
     uint8_t token_at = 0;
     uint8_t payload_at = 0;
@@ -57,7 +53,7 @@ bool coap_message_generator(OutputIterator out,const coapi::coap_message &msg)
     return generate(out,
            (
            byte_[_1 = ref(coap_header)] 
-           << byte_[_1 = ref(coap_code)]
+           << byte_[_1 = ref(msg.code)]
            << big_word[_1 = ref(msg.message_id)]
            << repeat(size(phnx::ref(msg.token)))[byte_[_1 = phnx::ref(msg.token)[phnx::ref(token_at)++]]]
            
@@ -167,9 +163,8 @@ bool coap_message_parser(Iterator first, Iterator last, coapi::coap_message &msg
               ));
 
     msg.version = (coap_header & 0b11000000) >> 6;
-    msg.type = (coap_header & 0b00110000) >> 4;
-    msg.code_class = (coap_code & 0b11100000) >> 5;
-    msg.code_detail = (coap_code & 0b00011111);
+    msg.type = (coapi::coap_type)((coap_header & 0b00110000));
+    msg.code = (coapi::code_registry)coap_code;
 
     return r;
 };

@@ -22,9 +22,7 @@ struct coap_message {
   uint8_t version;
   uint8_t type;
 
-  uint8_t code_class;
-  uint8_t code_detail;
-
+  code_registry code;
   uint16_t message_id;
 
   std::vector<uint8_t> token;

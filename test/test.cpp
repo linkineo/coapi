@@ -11,8 +11,7 @@ void compare_frames(coapi::coap_message m_in, coapi::coap_message m_out)
    coapi::sort_options(m_in.options);
    
    assert(m_out.type == m_in.type);
-   assert(m_out.code_class == m_in.code_class);
-   assert(m_out.code_detail == m_in.code_detail);
+   assert(m_out.code == m_in.code);
    assert(m_out.message_id == m_in.message_id);
    assert(std::equal(m_out.token.begin(),m_out.token.end(),m_in.token.begin()));
 
@@ -33,20 +32,20 @@ void create_reference_frame(const coapi::coap_message m_in,bytes &reference_fram
   pdu->setVersion(m_in.version);
   switch(m_in.type)
   {
-    case 0:
+    case coapi::coap_type::confirmable:
     pdu->setType((CoapPDU::Type::COAP_CONFIRMABLE));
     break;
-    case 1:
+    case coapi::coap_type::non_confirmable:
     pdu->setType((CoapPDU::Type::COAP_NON_CONFIRMABLE));
     break;
-    case 2:
+    case coapi::coap_type::acknowledgement:
     pdu->setType((CoapPDU::Type::COAP_ACKNOWLEDGEMENT));
     break;
-    case 3:
+    case coapi::coap_type::reset:
     pdu->setType((CoapPDU::Type::COAP_RESET));
     break;
   }
-  pdu->setCode(CoapPDU::Code((m_in.code_class << 5) + m_in.code_detail));
+  pdu->setCode(CoapPDU::Code(m_in.code));
   pdu->setToken((uint8_t*)&m_in.token[0],m_in.token.size());
   pdu->setMessageID(m_in.message_id);
 

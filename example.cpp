@@ -38,7 +38,7 @@ int main(int argc, char **argv)
   {
   std::cout << "Parsing FAIL" << std::endl;
   }
-  std::cout << "Version=" << (int)m.version << " Type=" << (int)m.type << " "<< " Class=" << (int)m.code_class << " Detail=" << (int)m.code_detail << " ID=" << (int)m.message_id<< std::endl;
+  std::cout << "Version=" << (int)m.version << " Type=" << (int)m.type << " "<< " Class=" << (int)m.code << " ID=" << (int)m.message_id<< std::endl;
   for(auto &el:m.token)
   {
   std::cout << "Token val=" << (int)el << std::endl;

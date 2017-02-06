@@ -12,7 +12,14 @@ enum cc : uint8_t
 };
 
 
-enum code : uint8_t {
+enum coap_type : uint8_t {
+  confirmable = 0,
+  non_confirmable = (1 << 4),
+  acknowledgement = (2 << 4),
+  reset = (3 << 4)
+};
+
+enum code_registry : uint8_t {
   empty = 0,
 
   GET = cc::method + 1,
