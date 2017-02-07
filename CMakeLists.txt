@@ -14,6 +14,7 @@ endif()
 include_directories(${CMAKE_SOURCE_DIR}/coapi)
 
 add_definitions(-std=c++11)
+add_definitions(-ftemplate-depth-500)
 add_executable(coapi example.cpp)
 
 add_subdirectory(test)
