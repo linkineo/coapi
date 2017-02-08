@@ -131,7 +131,7 @@ bool coap_message_parser(Iterator first, Iterator last, coapi::coap_message &msg
                         ( eps(ref(option_header) == 0xFF) >> +byte_[push_back(phnx::ref(msg.payload),_1)])
                         |
                         (
-                        eps[ref(delta) = (ref(option_header) >> 4 )] >> eps(ref(option_delta_length) = (ref(option_header) & 0b00001111)) 
+                        eps[ref(delta) = (ref(option_header) >> 4 )] >> eps[ref(option_delta_length) = (ref(option_header) & 0b00001111)]
                         //option optional delta
                         >> (
                               (  eps(ref(delta) <= 12)  
