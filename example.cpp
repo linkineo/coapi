@@ -5,6 +5,9 @@
 int main(int argc, char **argv)
 {
 
+  coapi::message msg;
+  msg.type(coapi::coap_type::confirmable);
+  auto a = msg.type();
   coapi::coap_message m;
   
   std::vector<uint8_t> v{0b01110011, //version - type - token length

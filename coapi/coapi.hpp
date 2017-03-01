@@ -13,6 +13,7 @@
 
 namespace coapi {
 
+typedef std::vector<uint8_t> bytes;
 namespace qi = boost::spirit::qi;
 namespace ka = boost::spirit::karma;
 

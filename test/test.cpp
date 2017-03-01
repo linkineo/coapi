@@ -26,11 +26,16 @@ void compare_frames(coapi::coap_message m_in, coapi::coap_message m_out)
    assert(std::equal(m_out.payload.begin(),m_out.payload.end(),m_in.payload.begin()));
 }
 
-void create_reference_frame(const coapi::coap_message m_in,bytes &reference_frame)
+void create_reference_frame(const coapi::coap_message m_in,coapi::bytes &reference_frame)
 {
   CoapPDU *pdu = new CoapPDU(); 
-  pdu->setVersion(m_in.version);
-  switch(m_in.type)
+
+  using namespace coapi;
+  
+  message m(m_in);
+
+  pdu->setVersion(m.version());
+  switch(m.type())
   {
     case coapi::coap_type::confirmable:
     pdu->setType((CoapPDU::Type::COAP_CONFIRMABLE));
@@ -45,22 +50,22 @@ void create_reference_frame(const coapi::coap_message m_in,bytes &reference_fram
     pdu->setType((CoapPDU::Type::COAP_RESET));
     break;
   }
-  pdu->setCode(CoapPDU::Code(m_in.code));
-  pdu->setToken((uint8_t*)&m_in.token[0],m_in.token.size());
-  pdu->setMessageID(m_in.message_id);
+  pdu->setCode(CoapPDU::Code(m.code()));
+  pdu->setToken((uint8_t*)&m.token()[0],m.token().size());
+  pdu->setMessageID(m.id());
 
-  for(auto &opt:m_in.options)
+  for(auto &opt:m.options())
   { 
   pdu->addOption(opt.number,opt.values.size(),(uint8_t*)&(opt.values[0]));
   }
 
-  pdu->setPayload((uint8_t*)&(m_in.payload[0]),m_in.payload.size());
+  pdu->setPayload((uint8_t*)&(m.payload()[0]),m.payload().size());
 
 
-  reference_frame = bytes(pdu->getPDUPointer(),pdu->getPDUPointer()+pdu->getPDULength());
+  reference_frame = coapi::bytes(pdu->getPDUPointer(),pdu->getPDUPointer()+pdu->getPDULength());
 }
 
-void print_frame(const bytes frame)
+void print_frame(const coapi::bytes frame)
 {
   int line=0;
   for(auto &l:frame)
@@ -78,7 +83,7 @@ int perform_parser_tests(const test_list &tests, bool debug)
   int test = 1;
   for(auto el:tests)
   {
-    bytes frame;
+    coapi::bytes frame;
     coapi::coap_message m_out;
     create_reference_frame(el,frame);
 
@@ -115,10 +120,10 @@ int perform_generator_tests(test_list &tests, bool debug)
   int test = 1; 
   for(auto el:tests)
   {
-    bytes generated,reference;
-    std::back_insert_iterator<bytes> genit(generated);
+    coapi::bytes generated,reference;
+    std::back_insert_iterator<coapi::bytes> genit(generated);
 
-    coapi::sort_options(el.options);
+   // coapi::sort_options(el.options);
     create_reference_frame(el,reference);
     coapi::coap_message_generator(genit,el);
 
