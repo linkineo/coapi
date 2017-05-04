@@ -1,3 +1,4 @@
+#include <iostream>
 #include <coapi.hpp>
 
 typedef std::vector<coapi::coap_message> test_list;
@@ -212,5 +213,18 @@ void test_13(test_list &tests)
   tests.push_back(m_in);
 }
 
+void test_14(test_list &tests)
+{
+  message m;
 
+  m.type(coap_type::confirmable)
+   .code(code_registry::GET)
+   .id(0xABCD)
+   .token("BCAFF")
+   .uri("hello/world/myself&test=5&pillow=3&world=6");
+
+  assert(m.uri() == "/hello/world/myself&test=5&pillow=3&world=6");
+ 
+  tests.push_back(m.raw());
+}
 

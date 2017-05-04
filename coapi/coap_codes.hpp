@@ -71,6 +71,8 @@ enum option_registry : uint16_t {
   size1 = 60
 };
 
+constexpr int max_length_uri_path_query = 255;
+
 }
 
 #endif

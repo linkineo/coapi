@@ -3,7 +3,7 @@
 
 #include <algorithm>
 #include <vector>
-
+#include <boost/algorithm/string.hpp>
 #include <coap_codes.hpp>
 
 namespace coapi {
@@ -157,6 +157,60 @@ public:
   coap_options_list options()
   {
     return _msg.options;
+  }
+
+  coapi::message &uri(std::string val)
+  {
+    std::vector<std::string> tokens_slash;
+    std::vector<std::string> tokens_ampersand;
+    boost::split(tokens_slash, val, boost::is_any_of("/"));
+    if(!tokens_slash.empty())
+    {
+     boost::split(tokens_ampersand, tokens_slash[tokens_slash.size()-1], boost::is_any_of("&"));
+    }   
+    
+    for(int p=0;p<tokens_slash.size()-1;p++)
+    {
+      if(tokens_slash[p].size() < coapi::max_length_uri_path_query)
+      {
+        add_option(option_registry::uri_path,tokens_slash[p]);
+      }
+    }
+    
+    add_option(option_registry::uri_path,tokens_ampersand[0]);
+    
+    for(int p=1; p<tokens_ampersand.size();p++)
+    { 
+      if(tokens_ampersand[p].size() < coapi::max_length_uri_path_query)
+      {
+        add_option(option_registry::uri_query,tokens_ampersand[p]);
+      }
+    } 
+
+    return *this;
+  }
+ 
+  std::string uri()
+  { 
+    std::string uri,uri_slashes,uri_ampersands;
+    auto list = options();
+    for(auto &option : list)
+    {
+      if(option.number == option_registry::uri_path)
+      {
+        std::string sls(option.values.begin(),option.values.end());
+        uri_slashes += "/" + sls;         
+      }
+
+      if(option.number == option_registry::uri_query)
+      {
+        std::string amps(option.values.begin(),option.values.end());
+        uri_ampersands += "&" + amps;
+      } 
+    }
+
+    uri += uri_slashes + uri_ampersands;
+    return uri;      
   }
   
   coapi::message &payload(coap_payload payload)

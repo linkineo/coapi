@@ -1,5 +1,6 @@
 #include <boost/asio.hpp>
 #include <subtests.hpp>
+#include <iostream>
 #include <coapi.hpp>
 
 void online_test(const std::vector<uint8_t> bytes)
@@ -42,26 +43,18 @@ void online_test(const std::vector<uint8_t> bytes)
 
 int main(int argc, char** argv)
 {
-  coapi::coap_message msg;
-  msg.version = 1;
-  msg.type = coapi::coap_type::confirmable;
-  msg.code = coapi::code_registry::GET;
-
-  msg.message_id = 0xAAAA;
+  coapi::message msg;
   
-  std::string tok("BBBB"); //8 bytes max
-  msg.token = bytes(tok.begin(),tok.end());
+  msg.type(coap_type::confirmable)
+     .code(code_registry::GET)
+     .id(0xAAAA)
+     .token("BBBB")
+     .uri("test");
 
-  coapi::coap_option option;
-  option.number = coapi::option_registry::uri_path;
-  std::string vals("test");
-  option.values = bytes(vals.begin(),vals.end());
-
-  msg.options.push_back(option);
 
   std::vector<uint8_t> bytes{};
   std::back_insert_iterator<std::vector<uint8_t>> it(bytes);
-  auto ok = coapi::coap_message_generator(it,msg);
+  auto ok = coapi::coap_message_generator(it,msg.raw());
 
   online_test(bytes);
   
