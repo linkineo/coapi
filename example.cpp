@@ -8,7 +8,6 @@ int main(int argc, char **argv)
   coapi::message msg;
   msg.type(coapi::coap_type::confirmable);
   auto a = msg.type();
-  coapi::coap_message m;
   
   std::vector<uint8_t> v{0b01110011, //version - type - token length
                          0b11111111, //code
@@ -35,7 +34,10 @@ int main(int argc, char **argv)
                          0b10000000, // -
                         }; 
 
-  auto p = coap_message_parser(v.begin(),v.end(),m);
+  coapi::message mi;
+  auto p = decode(v.begin(),v.end(),mi);
+
+  auto m = mi.raw();
 
   if(!p)
   {
@@ -74,7 +76,7 @@ int main(int argc, char **argv)
 
   std::vector<uint8_t> vv{};
   std::back_insert_iterator<std::vector<uint8_t>> it(vv);
-  auto pp = coap_message_generator(it,m);
+  auto pp = encode(m,it);
   for(auto &m:vv) 
   {
   std::cout << std::bitset<8>(m) << std::endl;

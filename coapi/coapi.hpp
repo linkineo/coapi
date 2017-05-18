@@ -18,7 +18,7 @@ namespace qi = boost::spirit::qi;
 namespace ka = boost::spirit::karma;
 
 template <typename OutputIterator>
-bool coap_message_generator(OutputIterator out,const coapi::coap_message &msg)
+bool encode(coapi::message m,OutputIterator out)
 {
     using ka::generate;
     using ka::byte_;
@@ -33,7 +33,9 @@ bool coap_message_generator(OutputIterator out,const coapi::coap_message &msg)
     using ka::repeat;
 
     namespace phnx = boost::phoenix;
-    
+ 
+    coapi::coap_message msg =  m.raw();
+   
     uint8_t coap_header = 0;
     uint8_t options_header = 0;
   
@@ -87,7 +89,7 @@ bool coap_message_generator(OutputIterator out,const coapi::coap_message &msg)
 }
 
 template <typename Iterator>
-bool coap_message_parser(Iterator first, Iterator last, coapi::coap_message &msg)
+bool decode(Iterator first, Iterator last, coapi::message &m)
 {
     using qi::byte_;
     using qi::big_word;
@@ -108,6 +110,7 @@ bool coap_message_parser(Iterator first, Iterator last, coapi::coap_message &msg
     uint32_t delta = 0;
     uint8_t option_delta_length = 0;
 
+    coapi::coap_message msg;
     coapi::coap_option option{};   
  
     bool r = parse(first, last, 
@@ -166,7 +169,7 @@ bool coap_message_parser(Iterator first, Iterator last, coapi::coap_message &msg
     msg.version = (coap_header & 0b11000000) >> 6;
     msg.type = (coapi::coap_type)((coap_header & 0b00110000));
     msg.code = (coapi::code_registry)coap_code;
-
+    m = msg;
     return r;
 };
 }

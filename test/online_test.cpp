@@ -28,11 +28,11 @@ void online_test(const std::vector<uint8_t> bytes)
   std::cout << std::bitset<8>(p) << std::endl;
   }*/ 
   
-  coapi::coap_message msg{};
-  coapi::coap_message_parser(rep_bytes.begin(),rep_bytes.end(),msg);
+  coapi::message msg{};
+  coapi::decode(rep_bytes.begin(),rep_bytes.end(),msg);
   
   
-  for(auto &el:msg.payload)
+  for(auto &el:msg.raw().payload)
   {
   std::cout << el; 
   }
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 
   std::vector<uint8_t> bytes{};
   std::back_insert_iterator<std::vector<uint8_t>> it(bytes);
-  auto ok = coapi::coap_message_generator(it,msg.raw());
+  auto ok = coapi::encode(msg,it);
 
   online_test(bytes);
   

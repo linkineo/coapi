@@ -6,8 +6,11 @@
 #include <subtests.hpp>
 #include <coapi.hpp>
 
-void compare_frames(coapi::coap_message m_in, coapi::coap_message m_out)
+void compare_frames(coapi::message mi, coapi::message mo)
 {
+
+   coapi::coap_message m_in = mi.raw();
+   coapi::coap_message m_out = mo.raw();
    coapi::sort_options(m_in.options);
    
    assert(m_out.type == m_in.type);
@@ -26,14 +29,12 @@ void compare_frames(coapi::coap_message m_in, coapi::coap_message m_out)
    assert(std::equal(m_out.payload.begin(),m_out.payload.end(),m_in.payload.begin()));
 }
 
-void create_reference_frame(const coapi::coap_message m_in,coapi::bytes &reference_frame)
+void create_reference_frame(coapi::message m,coapi::bytes &reference_frame)
 {
   CoapPDU *pdu = new CoapPDU(); 
 
   using namespace coapi;
   
-  message m(m_in);
-
   pdu->setVersion(m.version());
   switch(m.type())
   {
@@ -84,7 +85,7 @@ int perform_parser_tests(const test_list &tests, bool debug)
   for(auto el:tests)
   {
     coapi::bytes frame;
-    coapi::coap_message m_out;
+    coapi::message m_out;
     create_reference_frame(el,frame);
 
       std::cout << std::endl << "---------PTest=" << test << std::endl;
@@ -93,7 +94,7 @@ int perform_parser_tests(const test_list &tests, bool debug)
       print_frame(frame);
     }
 
-    if(coapi::coap_message_parser(frame.begin(),frame.end(),m_out))
+    if(coapi::decode(frame.begin(),frame.end(),m_out))
     {
       compare_frames(el,m_out);
       std::cout << "Subtest passed..." << std::endl;
@@ -125,7 +126,7 @@ int perform_generator_tests(test_list &tests, bool debug)
 
    // coapi::sort_options(el.options);
     create_reference_frame(el,reference);
-    coapi::coap_message_generator(genit,el);
+    coapi::encode(el,genit);
 
     std::cout << std::endl << "---------GTest=" << test << std::endl;
     
