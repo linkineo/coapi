@@ -156,35 +156,6 @@ void test_12(test_list &tests)
 {
   message m;
   
-  m.type(coap_type::acknowledgement)
-   .code(code_registry::created)  
-   .id(0xACAB)
-   .token("LAND");
-   
-  auto m_in = m;
-
-/*  coapi::coap_option o_in;
-  o_in.number=160;
-
-  std::string vals("a");
-  o_in.values = coapi::bytes(vals.begin(),vals.end());
-  m_in.options.push_back(o_in);
-
-  coapi::coap_option o_in2;
-  o_in2.number=500;
-
-  std::string vals2("b");
-  o_in2.values = coapi::bytes(vals2.begin(),vals2.end());
-  m_in.options.push_back(o_in2);
-
-*/
-  tests.push_back(m_in);
-}
-
-void test_13(test_list &tests)
-{
-  message m;
-  
   m.type(coap_type::non_confirmable)
    .code(code_registry::not_acceptable)  
    .id(0xEEEE)
@@ -192,28 +163,14 @@ void test_13(test_list &tests)
    .add_option(option_registry::uri_path,"tonightim")
    .add_option(option_registry::uri_path,"gonnahavetonightarealgoodtimegonnahavetonightarealgoodtimegonnahavetonightarealgoodtimegonnahavetonightarealgoodtimegonnahavetonightarealgoodtimegonnahavetonightarealgoodtimegonnahavetonightarealgoodtime")
    .add_option(option_registry::size1,"theres")
+   .add_option(option_registry::uri_path,"nostoppingme")
+   .add_option(option_registry::proxy_uri,"t")
    .payload("itsagodawfulsmallaffairforthegirlwiththemouseyhair");
   
-  auto m_in = m;
-/*
-  coapi::coap_option o_in4;
-  o_in4.number=500;
-
-  std::string vals4("nostoppingme");
-  o_in4.values = coapi::bytes(vals4.begin(),vals4.end());
-  m_in.options.push_back(o_in4);
-
-  coapi::coap_option o_in5;
-  o_in5.number=1000;
-
-  std::string vals5("t");
-  o_in5.values = coapi::bytes(vals5.begin(),vals5.end());
-  m_in.options.push_back(o_in5);
-*/
-  tests.push_back(m_in);
+  tests.push_back(m);
 }
 
-void test_14(test_list &tests)
+void test_13(test_list &tests)
 {
   message m;
 
